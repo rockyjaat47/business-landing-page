@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Business Page</title>
+<meta name="description" content="Services, prices, timings and location — chat on WhatsApp, call or get directions in one tap." />
+<meta name="theme-color" content="#0e0e0e" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0e0e0e; --paper:#faf9f5; --card:#ffffff; --muted:#6b6b6b; --line:#e8e6df;
+    --wa:#25d366; --lime:#d4f74a; --blue:#1f7aff; --pink:#ff6fb5;
+    --a1:#ff5a1f; --a2:#ff3d8b;              /* accent gradient, set per business */
+    --accent:var(--a1);
+    --radius:22px; --shadow:4px 4px 0 var(--ink);
+    --display:"Anton", Impact, "Arial Narrow", sans-serif;
+    --body:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{font-family:var(--body);color:var(--ink);background:var(--paper);
+    background-image:radial-gradient(#00000012 1px,transparent 1px);background-size:22px 22px;
+    -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(1180px,100% - 40px);margin-inline:auto}
+  .display{font-family:var(--display);text-transform:uppercase;letter-spacing:.005em;line-height:.95;font-weight:400}
+  .grad-text{background:linear-gradient(90deg,var(--a2),var(--a1));-webkit-background-clip:text;background-clip:text;color:transparent}
+  svg.i{width:18px;height:18px;flex:none}
+
+  /* ---------- Buttons ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:15px;
+    padding:14px 22px;border-radius:999px;border:2px solid var(--ink);cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;box-shadow:var(--shadow);white-space:nowrap;font-family:inherit}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+  .btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+  .btn-wa{background:var(--wa);color:var(--ink)}
+  .btn-call{background:var(--lime)}
+  .btn-map{background:var(--blue);color:#fff}
+  .btn-dark{background:var(--ink);color:#fff}
+  .btn-sm{padding:10px 16px;font-size:14px;box-shadow:3px 3px 0 var(--ink)}
+
+  /* ---------- Nav ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 82%,transparent);
+    backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
+  .nav.scrolled{border-bottom-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex:none;
+    background:linear-gradient(135deg,var(--a2),var(--a1));color:#fff;font-family:var(--display);font-size:22px;border:2px solid var(--ink)}
+  .brand b{display:block;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand small{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .nav-links{display:flex;gap:4px}
+  .nav-links a{font-weight:600;font-size:14.5px;padding:8px 14px;border-radius:999px;transition:background .15s}
+  .nav-links a:hover{background:#00000010}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:56px 0 40px}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:7px 13px;border-radius:999px;background:var(--card);border:1.5px solid var(--ink)}
+  .dot{width:8px;height:8px;border-radius:50%;background:#bbb}
+  .dot.open{background:var(--wa);box-shadow:0 0 0 4px #25d36633;animation:pulse 2s infinite}
+  .dot.closed{background:#e5484d}
+  @keyframes pulse{50%{box-shadow:0 0 0 7px #25d36611}}
+  .hero h1{font-size:clamp(52px,8.4vw,112px)}
+  .hero h1 .dotend{color:var(--a1)}
+  .tagline{font-size:clamp(17px,1.6vw,20px);color:#3a3a3a;max-width:34ch;margin:22px 0 28px}
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+  .rating{display:flex;align-items:center;gap:12px;margin-top:30px;font-size:14px;color:var(--muted)}
+  .stars{color:#ffb400;letter-spacing:2px;font-size:17px}
+  .rating b{color:var(--ink);font-size:16px}
+  .avatars{display:flex}
+  .avatars span{width:34px;height:34px;border-radius:50%;border:2px solid var(--paper);margin-left:-9px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff}
+  .avatars span:first-child{margin-left:0}
+
+  /* Hero visual (phone) */
+  .visual{position:relative;display:flex;justify-content:center;padding:20px 0}
+  .phone{width:min(330px,82vw);background:var(--ink);border-radius:46px;padding:11px;box-shadow:0 40px 80px -30px #00000066;position:relative;transform:rotate(2deg)}
+  .phone::before{content:"";position:absolute;top:20px;left:50%;translate:-50% 0;width:96px;height:26px;background:var(--ink);border-radius:20px;z-index:3}
+  .screen{background:#f6f5f1;border-radius:36px;overflow:hidden;height:600px;position:relative}
+  .scroller{animation:scrollPhone 14s ease-in-out infinite;padding:46px 14px 90px}
+  @keyframes scrollPhone{0%,18%{transform:translateY(0)}45%,62%{transform:translateY(-300px)}90%,100%{transform:translateY(0)}}
+  .urlbar{font-size:10.5px;text-align:center;background:#ebe9e3;border-radius:999px;padding:5px;color:#666;margin-bottom:10px}
+  .p-hero{border-radius:20px;padding:18px;color:#fff;background:linear-gradient(135deg,var(--a2),var(--a1));min-height:170px}
+  .p-hero .logo{width:32px;height:32px;font-size:16px;border-radius:9px;background:#fff;color:var(--a1);border:0}
+  .p-hero h4{font-family:var(--display);font-weight:400;font-size:30px;line-height:.95;margin:12px 0 6px;text-transform:uppercase}
+  .p-hero p{font-size:11px;opacity:.9}
+  .p-hero .pill{display:inline-block;font-size:10px;font-weight:700;background:#00000030;border-radius:99px;padding:4px 9px;margin-top:10px}
+  .p-h{font-weight:800;font-size:13px;margin:14px 2px 8px}
+  .p-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-bottom:7px;font-size:11.5px}
+  .p-row i{width:20px;height:20px;border-radius:6px;flex:none}
+  .p-row b{display:block;font-size:11.5px}
+  .p-row small{color:var(--muted);font-size:9.5px}
+  .p-row em{margin-left:auto;font-style:normal;font-weight:800}
+  .p-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .p-grid div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px;font-size:22px;text-align:center}
+  .p-grid div span{display:grid;place-items:center;height:56px;border-radius:8px;margin-bottom:6px}
+  .p-grid div b{display:block;height:5px;width:60%;background:#ddd;border-radius:4px}
+  .p-grid div b+b{width:35%;background:var(--a1);margin-top:4px}
+  .p-bar{position:absolute;left:10px;right:10px;bottom:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:5px;z-index:2}
+  .p-bar span{font-size:10.5px;font-weight:700;text-align:center;border-radius:10px;padding:8px 0}
+  .float{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:9px 13px;box-shadow:var(--shadow);z-index:4;animation:bob 5s ease-in-out infinite}
+  .float .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
+  .float b{display:block;font-size:13.5px;line-height:1.1}
+  .float small{font-size:11px;color:var(--muted)}
+  .f1{top:14%;left:-2%}
+  .f2{top:44%;right:-4%;animation-delay:-1.6s}
+  .f3{bottom:12%;left:0;animation-delay:-3.2s}
+  .sticker{position:absolute;top:2%;right:4%;z-index:4;background:var(--lime);border:2.5px solid var(--ink);border-radius:999px;padding:8px 18px;transform:rotate(-9deg);box-shadow:var(--shadow);text-align:center}
+  .sticker small{display:block;font-size:11px;font-weight:700;font-style:italic;line-height:1}
+  .sticker b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1}
+  @keyframes bob{50%{transform:translateY(-8px)}}
+
+  /* ---------- Marquee ---------- */
+  .marquee{background:var(--ink);color:#fff;overflow:hidden;border-block:2px solid var(--ink);margin:30px 0 0;transform:rotate(-1.2deg);width:104%;margin-left:-2%}
+  .marquee .track{display:flex;gap:42px;padding:15px 0;width:max-content;animation:marq 32s linear infinite}
+  .marquee span{font-family:var(--display);font-size:24px;text-transform:uppercase;display:flex;align-items:center;gap:42px;white-space:nowrap}
+  .marquee span::after{content:"✦";color:var(--lime);font-size:18px}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ---------- Sections ---------- */
+  section.block{padding:92px 0}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+  .eyebrow{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--a1);margin-bottom:12px}
+  .sec-head h2{font-size:clamp(40px,5.6vw,72px)}
+  .sec-head p{color:var(--muted);max-width:40ch;font-size:16px}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:70px}
+  .stat{background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .stat b{font-family:var(--display);font-weight:400;font-size:44px;line-height:1;display:block}
+  .stat span{color:var(--muted);font-size:14px;font-weight:500}
+
+  /* Services */
+  .services{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+  .svc{display:flex;align-items:center;gap:16px;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:20px;transition:border-color .2s, transform .2s, box-shadow .2s}
+  .svc:hover{border-color:var(--ink);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .svc .sw{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:24px;flex:none}
+  .svc h3{font-size:16.5px;line-height:1.25}
+  .svc p{color:var(--muted);font-size:13.5px;margin-top:3px}
+  .svc .right{margin-left:auto;text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .price{font-weight:800;font-size:18px}
+  .price.ask{font-size:14px;color:var(--a1)}
+  .mini{font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;display:inline-flex;align-items:center;gap:5px;transition:background .15s}
+  .mini:hover{background:var(--wa)}
+
+  /* Products */
+  .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .prod{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;transition:transform .2s, box-shadow .2s, border-color .2s}
+  .prod:hover{transform:translateY(-4px);border-color:var(--ink);box-shadow:var(--shadow)}
+  .prod .ph{aspect-ratio:1/1;border-radius:15px;display:grid;place-items:center;font-size:64px;position:relative;overflow:hidden}
+  .prod .ph img{width:100%;height:100%;object-fit:cover}
+  .prod .tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:800;background:var(--ink);color:#fff;padding:4px 9px;border-radius:99px}
+  .prod h3{font-size:15.5px;margin:13px 4px 2px}
+  .prod p{font-size:13px;color:var(--muted);margin:0 4px}
+  .prod .foot{display:flex;align-items:center;justify-content:space-between;margin:12px 4px 4px;margin-top:auto;padding-top:12px}
+
+  /* About / why */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .about-card{background:linear-gradient(135deg,var(--a2),var(--a1));color:#fff;border-radius:30px;padding:44px;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink);position:relative;overflow:hidden}
+  .about-card::after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:#ffffff18;right:-90px;bottom:-110px}
+  .about-card h2{font-size:clamp(38px,4.6vw,60px);margin-bottom:18px}
+  .about-card p{font-size:17px;opacity:.95;max-width:44ch;position:relative;z-index:1}
+  .owner{display:flex;align-items:center;gap:12px;margin-top:28px;position:relative;z-index:1}
+  .owner span{width:46px;height:46px;border-radius:50%;background:#fff;color:var(--a1);display:grid;place-items:center;font-weight:800}
+  .owner small{display:block;opacity:.85}
+  .features{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .feat{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:22px}
+  .feat .ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:22px;margin-bottom:14px;border:1.5px solid var(--ink)}
+  .feat h3{font-size:16px;margin-bottom:4px}
+  .feat p{font-size:13.5px;color:var(--muted)}
+
+  /* Reviews */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .rev{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:16px}
+  .rev q{font-size:16px;line-height:1.55;quotes:none}
+  .rev .who{display:flex;align-items:center;gap:11px;margin-top:auto}
+  .rev .who span{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff}
+  .rev .who small{display:block;color:var(--muted);font-size:12.5px}
+
+  /* Visit */
+  .visit{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px}
+  .panel{background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+  .panel h3{font-size:19px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .hours{list-style:none}
+  .hours li{display:flex;justify-content:space-between;padding:11px 12px;border-radius:12px;font-size:15px}
+  .hours li:nth-child(odd){background:#f6f5f1}
+  .hours li.today{background:var(--lime);font-weight:700}
+  .hours li .off{color:#e5484d;font-weight:600}
+  .addr{margin-top:20px;padding-top:20px;border-top:1.5px dashed var(--line);font-size:15px;display:flex;gap:12px}
+  .addr-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .map{border-radius:16px;overflow:hidden;border:1.5px solid var(--line);height:260px;margin-bottom:22px;background:#eef1ea}
+  .map iframe{width:100%;height:100%;border:0;display:block}
+  form .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+  .field label{font-size:13px;font-weight:600}
+  .field input,.field textarea,.field select{font:inherit;font-size:15px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fffbea;transition:border-color .15s, background .15s;width:100%;color:var(--ink)}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--ink);background:#fff}
+  .field textarea{resize:vertical;min-height:90px}
+  form .btn{width:100%;margin-top:6px}
+  .sent{background:var(--wa)!important}
+
+  /* FAQ */
+  .faq{max-width:820px}
+  details{background:var(--card);border:1.5px solid var(--line);border-radius:18px;margin-bottom:12px;transition:border-color .2s}
+  details[open]{border-color:var(--ink)}
+  summary{cursor:pointer;list-style:none;padding:20px 22px;font-weight:700;font-size:16.5px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:24px;font-weight:500;transition:transform .2s;flex:none}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{padding:0 22px 20px;color:#444}
+
+  /* CTA + footer */
+  .cta{background:var(--ink);color:#fff;border-radius:36px;padding:72px 30px;text-align:center;position:relative;overflow:hidden}
+  .cta::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff14 1px,transparent 1px);background-size:22px 22px}
+  .cta>*{position:relative}
+  .cta h2{font-size:clamp(44px,7vw,92px)}
+  .cta p{color:#bbb;margin:16px auto 30px;max-width:46ch;font-size:17px}
+  .cta .hero-ctas{justify-content:center}
+  .cta .btn{border-color:#fff;box-shadow:4px 4px 0 #ffffff55}
+  footer{padding:40px 0 120px;color:var(--muted);font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .socials{display:flex;gap:8px}
+  .socials a{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--line);display:grid;place-items:center;background:#fff;transition:border-color .15s}
+  .socials a:hover{border-color:var(--ink)}
+
+  /* Mobile action bar */
+  .actionbar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;display:none;grid-template-columns:repeat(3,1fr);gap:7px;background:#fff;border:2px solid var(--ink);border-radius:20px;padding:6px;box-shadow:0 14px 34px -10px #00000055}
+  .actionbar a{display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:14.5px;border-radius:14px;padding:13px 0}
+  .fab{position:fixed;right:24px;bottom:24px;z-index:60;width:62px;height:62px;border-radius:50%;background:var(--wa);border:2px solid var(--ink);display:grid;place-items:center;box-shadow:var(--shadow);transition:transform .15s}
+  .fab:hover{transform:scale(1.07)}
+  .fab svg{width:30px;height:30px}
+
+  /* Demo switcher */
+  .demo{position:fixed;left:50%;translate:-50% 0;top:80px;z-index:70;display:flex;gap:4px;background:var(--ink);padding:5px;border-radius:999px;box-shadow:0 12px 30px -10px #0008;max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none}
+  .demo::-webkit-scrollbar{display:none}
+  .demo button{font:inherit;font-size:13px;font-weight:600;color:#ccc;background:none;border:0;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .demo button.on{background:#fff;color:var(--ink)}
+  .demo .lbl{color:var(--lime);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:8px 6px 8px 12px;white-space:nowrap;align-self:center}
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:1000px){
+    .hero .wrap{grid-template-columns:1fr;gap:30px}
+    .hero{padding-top:36px;text-align:left}
+    .about,.visit{grid-template-columns:1fr}
+    .reviews{grid-template-columns:1fr 1fr}
+    .stats{grid-template-columns:1fr 1fr}
+    .nav-links{display:none}
+  }
+  @media (max-width:720px){
+    .wrap{width:calc(100% - 32px)}
+    .actionbar{display:grid}
+    .fab{display:none}
+    .nav .btn{display:none}
+    section.block{padding:64px 0}
+    .hero h1{font-size:clamp(50px,15vw,80px)}
+    .hero-ctas .btn{flex:1 1 calc(50% - 6px)}
+    .hero-ctas .btn-wa{flex-basis:100%}
+    .features{grid-template-columns:1fr}
+    .reviews{grid-template-columns:1fr}
+    .services{grid-template-columns:1fr}
+    .products{grid-template-columns:1fr 1fr;gap:12px}
+    .prod .ph{font-size:48px}
+    .prod .foot{flex-direction:column;align-items:flex-start;gap:8px}
+    .svc{padding:16px;gap:13px}
+    .svc .sw{width:44px;height:44px;font-size:20px}
+    .about-card{padding:30px}
+    form .row{grid-template-columns:1fr}
+    .float{transform:scale(.86)}
+    .f1{left:-4%}.f2{right:-5%}.f3{left:-3%}
+    .stat b{font-size:36px}
+    .cta{border-radius:26px;padding:56px 22px}
+    .demo{top:auto;bottom:calc(84px + env(safe-area-inset-bottom))}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!--
+  ================================================================
+  HOW TO USE THIS TEMPLATE FOR A NEW CLIENT
+  ----------------------------------------------------------------
+  1. Copy one of the presets in BUSINESSES below (salon, cafe, gym,
+     clinic, boutique) or edit it directly.
+  2. Set ACTIVE to that preset's key.
+  3. Set SHOW_DEMO_SWITCHER = false before handing it to the client.
+  Phone/WhatsApp numbers: country code + number, digits only.
+  Product images: add an image URL as the 6th item of a product to replace the emoji tile.
+  ================================================================
+-->
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="brand"><span class="logo" data-bind="initial"></span><span><b data-bind="name"></b><small data-bind="category"></small></span></a>
+    <nav class="nav-links">
+      <a href="#services">Services</a><a href="#products">Products</a><a href="#about">About</a><a href="#visit">Visit</a>
+    </nav>
+    <a class="btn btn-wa btn-sm" data-href="wa"><svg class="i"><use href="#i-wa"/></svg>WhatsApp</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="chips">
+          <span class="chip" id="openChip"><span class="dot"></span><span>Checking hours…</span></span>
+          <span class="chip">📍 <span data-bind="area"></span></span>
+        </div>
+        <h1 class="display" id="heroTitle"></h1>
+        <p class="tagline" data-bind="tagline"></p>
+        <div class="hero-ctas">
+          <a class="btn btn-wa" data-href="wa"><svg class="i"><use href="#i-wa"/></svg>Chat on WhatsApp</a>
+          <a class="btn btn-call" data-href="tel"><svg class="i"><use href="#i-call"/></svg>Call now</a>
+          <a class="btn btn-map" data-href="map" target="_blank" rel="noopener"><svg class="i"><use href="#i-pin"/></svg>Directions</a>
+        </div>
+        <div class="rating">
+          <div class="avatars" id="avatars"></div>
+          <div><span class="stars">★★★★★</span><br><b data-bind="rating"></b> · <span data-bind="reviewCount"></span> Google reviews</div>
+        </div>
+      </div>
+
+      <div class="visual reveal">
+        <div class="sticker"><small>starting</small><b id="fromPrice"></b></div>
+        <div class="float f1"><span class="ic" style="background:var(--wa)"><svg class="i"><use href="#i-wa"/></svg></span><span><b>WhatsApp</b><small>one-tap chat</small></span></div>
+        <div class="float f2"><span class="ic" style="background:var(--lime)"><svg class="i"><use href="#i-call"/></svg></span><span><b>Call</b><small>direct dial</small></span></div>
+        <div class="float f3"><span class="ic" style="background:var(--blue);color:#fff"><svg class="i"><use href="#i-pin"/></svg></span><span><b>Google Map</b><small>directions</small></span></div>
+        <div class="phone" aria-hidden="true">
+          <div class="screen">
+            <div class="scroller" id="phoneScroller"></div>
+            <div class="p-bar"><span style="background:var(--wa)">WhatsApp</span><span style="background:var(--lime)">Call</span><span style="background:var(--blue);color:#fff">Map</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true"><div class="track" id="marquee"></div></div>
+
+    <div class="wrap"><div class="stats" id="stats"></div></div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="eyebrow" data-bind="servicesEyebrow"></span><h2 class="display">Services &amp; <span class="grad-text">prices</span></h2></div>
+        <p>Clear prices, no surprises. Tap <b>Book</b> and we'll confirm on WhatsApp.</p>
+      </div>
+      <div class="services" id="serviceList"></div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="block" id="products" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="eyebrow">Shop</span><h2 class="display" data-bind="productsTitle"></h2></div>
+        <p>Like something? Order it straight on WhatsApp — pay on pickup or delivery.</p>
+      </div>
+      <div class="products" id="productList"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="block" id="about" style="padding-top:0">
+    <div class="wrap about">
+      <div class="about-card reveal">
+        <span class="eyebrow" style="color:#fff;opacity:.85">Our story</span>
+        <h2 class="display" data-bind="aboutTitle"></h2>
+        <p data-bind="about"></p>
+        <div class="owner"><span data-bind="ownerInitial"></span><div><b data-bind="owner"></b><small data-bind="ownerRole"></small></div></div>
+      </div>
+      <div class="features" id="features"></div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="eyebrow">Reviews</span><h2 class="display">Loved by <span class="grad-text">locals</span></h2></div>
+        <p><span class="stars">★★★★★</span> <b data-bind="rating"></b> average from <span data-bind="reviewCount"></span> reviews</p>
+      </div>
+      <div class="reviews" id="reviewList"></div>
+    </div>
+  </section>
+
+  <!-- VISIT + ENQUIRY -->
+  <section class="block" id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="eyebrow">Visit us</span><h2 class="display">Timings &amp; <span class="grad-text">location</span></h2></div>
+        <p>Walk in, call ahead, or send an enquiry — we reply fast.</p>
+      </div>
+      <div class="visit">
+        <div class="panel reveal">
+          <h3>🕒 Opening hours</h3>
+          <ul class="hours" id="hours"></ul>
+          <div class="addr"><span style="font-size:20px">📍</span><div><b data-bind="name"></b><br><span data-bind="address"></span></div></div>
+          <div class="addr-actions">
+            <a class="btn btn-map btn-sm" data-href="map" target="_blank" rel="noopener"><svg class="i"><use href="#i-pin"/></svg>Get directions</a>
+            <a class="btn btn-call btn-sm" data-href="tel"><svg class="i"><use href="#i-call"/></svg><span data-bind="phoneDisplay"></span></a>
+          </div>
+        </div>
+        <div class="panel reveal">
+          <div class="map" id="map"></div>
+          <h3>✉️ Send an enquiry</h3>
+          <form id="enquiry" novalidate>
+            <div class="row">
+              <div class="field"><label for="fName">Your name</label><input id="fName" required autocomplete="name" placeholder="e.g. Priya" /></div>
+              <div class="field"><label for="fPhone">Phone</label><input id="fPhone" type="tel" required autocomplete="tel" inputmode="tel" placeholder="98xxx xxxxx" /></div>
+            </div>
+            <div class="field"><label for="fService">Interested in</label><select id="fService"></select></div>
+            <div class="field"><label for="fMsg">Message</label><textarea id="fMsg" placeholder="Preferred date/time, questions…"></textarea></div>
+            <button class="btn btn-dark" type="submit" id="fBtn">Send enquiry →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><span class="eyebrow">FAQ</span><h2 class="display">Quick <span class="grad-text">answers</span></h2></div></div>
+      <div class="faq" id="faq"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta reveal">
+        <span class="eyebrow" style="color:var(--lime)" data-bind="name"></span>
+        <h2 class="display" data-bind="ctaTitle"></h2>
+        <p data-bind="ctaText"></p>
+        <div class="hero-ctas">
+          <a class="btn btn-wa" data-href="wa"><svg class="i"><use href="#i-wa"/></svg>Chat on WhatsApp</a>
+          <a class="btn btn-call" data-href="tel"><svg class="i"><use href="#i-call"/></svg>Call now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><span class="logo" data-bind="initial"></span><span><b data-bind="name"></b><small>© <span id="yr"></span> · All rights reserved</small></span></div>
+    <div class="socials" id="socials"></div>
+  </div>
+</footer>
+
+<nav class="actionbar" aria-label="Quick contact">
+  <a data-href="wa" style="background:var(--wa)"><svg class="i"><use href="#i-wa"/></svg>WhatsApp</a>
+  <a data-href="tel" style="background:var(--lime)"><svg class="i"><use href="#i-call"/></svg>Call</a>
+  <a data-href="map" target="_blank" rel="noopener" style="background:var(--blue);color:#fff"><svg class="i"><use href="#i-pin"/></svg>Map</a>
+</nav>
+<a class="fab" data-href="wa" aria-label="Chat on WhatsApp"><svg><use href="#i-wa"/></svg></a>
+
+<!-- Icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.87 9.87 0 0 0 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.24 8.24 0 0 1 8.24 8.25c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48a.92.92 0 0 0-.66.31c-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.6.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+  <symbol id="i-call" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></g></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></g></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path fill="currentColor" d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8.5c0-.3.2-.5.5-.5Z"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></symbol>
+</svg>
+
+<script>
+/* =================================================================
+   EDIT HERE — everything on the page comes from this config
+   ================================================================= */
+const SHOW_DEMO_SWITCHER = true;   // set false for the final client page
+const ACTIVE = "salon";            // default business shown
+
+const SW = ["#ff8fc8","#d4f74a","#7fb2ff","#ffd36e","#9df0c4","#ffb38a","#c9a8ff","#8ee6ff","#ffe08a","#ffa6a6"]; // swatch colours
+
+const BUSINESSES = {
+  salon: {
+    label:"Salon", name:"Glow Studio", category:"Salon & Spa", area:"Sector 29, Gurugram",
+    titleLines:["Glow Studio","Salon & Spa"], tagline:"Hair, skin and bridal looks by certified stylists. Walk in fresh, walk out glowing.",
+    colors:["#ff3d8b","#ff5a1f"], whatsapp:"919876543210", phone:"+91 98765 43210",
+    address:"Shop 14, Galleria Market, DLF Phase 4, Gurugram, Haryana 122009",
+    rating:"4.8", reviewCount:"320", from:"₹499",
+    marquee:["Hair","Skin","Bridal","Nails","Keratin","Spa","Makeup"],
+    stats:[["8+","Years of styling"],["12k","Happy clients"],["4.8★","Google rating"],["15","Expert stylists"]],
+    servicesEyebrow:"Menu",
+    services:[
+      ["💇‍♀️","Hair cut & styling","45 min · wash + blow-dry","₹499"],
+      ["✨","Facial & cleanup","60 min · all skin types","₹899"],
+      ["💅","Gel manicure","40 min · long-lasting shine","₹699"],
+      ["🌿","Keratin treatment","2.5 hrs · smooth for months","₹3,499"],
+      ["💆‍♀️","Head & shoulder spa","30 min · stress relief","₹599"],
+      ["👰","Bridal package","Trial + wedding day look",null],
+    ],
+    productsTitle:"Salon <span class='grad-text'>essentials</span>",
+    products:[
+      ["🧴","Argan hair serum","Frizz control, 100ml","₹649","Bestseller"],
+      ["🫧","Vitamin C face wash","Brightening, 150ml","₹399"],
+      ["💄","Matte lip kit","3 shades","₹799","New"],
+      ["🧖‍♀️","Sheet mask pack","Pack of 5","₹349"],
+    ],
+    aboutTitle:"Beauty, done right.",
+    about:"Glow Studio started in 2017 with two chairs and one rule — treat every client like family. Today our team of 15 uses only premium, cruelty-free products in a spotless, hygienic space.",
+    owner:"Neha Kapoor", ownerRole:"Founder & lead stylist",
+    features:[["🧼","Hygiene first","Sterilised tools, fresh towels every time."],["🏅","Certified team","Trained in L'Oréal & Schwarzkopf techniques."],["⏱️","On-time slots","Book ahead on WhatsApp, zero waiting."],["💳","All payments","UPI, cards and cash accepted."]],
+    reviews:[["Best keratin in Gurugram! Staff is super polite and the place is so clean.","Ritika S."],["Did my bridal makeup here — everyone kept asking who my artist was. 10/10.","Ananya M."],["Quick haircut on a weekday, booked on WhatsApp in 2 minutes. Love it.","Karan B."]],
+    hours:{Mon:null,Tue:["10:00","20:00"],Wed:["10:00","20:00"],Thu:["10:00","20:00"],Fri:["10:00","20:00"],Sat:["09:00","21:00"],Sun:["09:00","21:00"]},
+    faq:[["Do I need an appointment?","Walk-ins are welcome, but booking on WhatsApp guarantees your slot with zero waiting."],["Which products do you use?","Premium salon brands like L'Oréal Professionnel, Schwarzkopf and O3+. Ask us for the full list."],["Do you offer home service for brides?","Yes — bridal and party makeup is available at your venue. Message us for a quote."],["How can I pay?","UPI, all major cards and cash."]],
+    ctaTitle:"Your glow-up starts here.", ctaText:"Send us a message and we'll lock in your slot today.",
+    socials:{ig:"#",fb:"#",yt:"#"},
+  },
+
+  cafe: {
+    label:"Café", name:"Brew & Bite", category:"Café & Bakery", area:"Indiranagar, Bengaluru",
+    titleLines:["Brew &","Bite Café"], tagline:"Small-batch coffee, fresh bakes every morning and the comfiest corner in Indiranagar.",
+    colors:["#ffb020","#e8501a"], whatsapp:"919812345678", phone:"+91 98123 45678",
+    address:"221, 12th Main Road, HAL 2nd Stage, Indiranagar, Bengaluru 560038",
+    rating:"4.7", reviewCount:"1,140", from:"₹149",
+    marquee:["Coffee","Croissants","Brunch","Cold brew","Desserts","Free Wi-Fi"],
+    stats:[["5","Years brewing"],["40k","Cups served"],["4.7★","Google rating"],["100%","Arabica beans"]],
+    servicesEyebrow:"Menu highlights",
+    services:[
+      ["☕","Cappuccino","Single-origin espresso","₹179"],
+      ["🧊","Cold brew","18-hour steep, smooth & strong","₹219"],
+      ["🥐","Butter croissant","Baked fresh every morning","₹149"],
+      ["🥑","Avocado toast","Sourdough, chilli flakes, feta","₹329"],
+      ["🍝","Pesto pasta","Basil pesto, parmesan","₹389"],
+      ["🎂","Custom cakes","Birthdays & events",null],
+    ],
+    productsTitle:"Take-home <span class='grad-text'>treats</span>",
+    products:[
+      ["🫘","House blend beans","Medium roast, 250g","₹549","Bestseller"],
+      ["🍪","Choco-chip cookies","Box of 6","₹299"],
+      ["🍞","Sourdough loaf","Baked daily","₹249"],
+      ["🍫","Brownie box","Box of 4","₹399","New"],
+    ],
+    aboutTitle:"Coffee with a story.",
+    about:"We roast in small batches and bake everything in-house. Whether you're working, catching up with friends or grabbing a quick cup, there's a seat with your name on it.",
+    owner:"Arjun Rao", ownerRole:"Founder & head barista",
+    features:[["📶","Free Wi-Fi","Fast internet + plenty of plugs."],["🐶","Pet friendly","Bring your furry friend along."],["🛵","Delivery","On Swiggy & Zomato, or order on WhatsApp."],["🎉","Private events","Book the space for parties."]],
+    reviews:[["Best cold brew in the city, no debate. Croissants sell out by 11 so come early!","Sneha P."],["My work-from-café spot. Great Wi-Fi, friendly staff, amazing pasta.","Rahul K."],["Ordered a birthday cake on WhatsApp — delivered on time and tasted incredible.","Divya N."]],
+    hours:{Mon:["08:00","22:00"],Tue:["08:00","22:00"],Wed:["08:00","22:00"],Thu:["08:00","22:00"],Fri:["08:00","23:00"],Sat:["08:00","23:00"],Sun:["09:00","23:00"]},
+    faq:[["Do you take table reservations?","Yes, for groups of 4 or more. Just drop us a WhatsApp."],["Do you have vegan options?","Oat & almond milk are available, plus a few vegan bakes daily."],["Can I order a custom cake?","Absolutely — give us 48 hours' notice for custom designs."],["Is there parking?","Street parking is available, and we're a 5-minute walk from the metro."]],
+    ctaTitle:"Your table's waiting.", ctaText:"Reserve a table, order a cake, or just say hi on WhatsApp.",
+    socials:{ig:"#",fb:"#"},
+  },
+
+  gym: {
+    label:"Gym", name:"IronCore Fitness", category:"Gym & Training", area:"Andheri West, Mumbai",
+    titleLines:["IronCore","Fitness"], tagline:"Modern equipment, certified trainers and a community that keeps you showing up.",
+    colors:["#3d5bff","#00c2a8"], whatsapp:"919900112233", phone:"+91 99001 12233",
+    address:"2nd Floor, Link Square Mall, Link Road, Andheri West, Mumbai 400053",
+    rating:"4.9", reviewCount:"610", from:"₹1,499",
+    marquee:["Strength","Cardio","CrossFit","Yoga","Zumba","Personal training"],
+    stats:[["6,000","Sq. ft floor"],["1,800+","Members"],["4.9★","Google rating"],["12","Certified coaches"]],
+    servicesEyebrow:"Memberships",
+    services:[
+      ["🏋️","Monthly membership","Full gym access","₹1,499"],
+      ["📅","Quarterly membership","Save 15%","₹3,799"],
+      ["🔥","Annual membership","Best value + 2 PT sessions","₹11,999"],
+      ["🧑‍🏫","Personal training","12 sessions / month","₹6,999"],
+      ["🧘","Yoga & Zumba batch","Mon–Sat, morning & evening","₹1,199"],
+      ["🥗","Diet consultation","Custom meal plan",null],
+    ],
+    productsTitle:"Supplements <span class='grad-text'>&amp; gear</span>",
+    products:[
+      ["🥤","Whey protein","Chocolate, 1kg","₹2,399","Bestseller"],
+      ["⚡","Pre-workout","30 servings","₹1,499"],
+      ["🧤","Lifting gloves","All sizes","₹599"],
+      ["🍶","Shaker bottle","700ml, leak-proof","₹349","New"],
+    ],
+    aboutTitle:"Train like you mean it.",
+    about:"IronCore is built for results — from first-timers to competitive lifters. Our coaches build a plan around your goals and keep you accountable every week.",
+    owner:"Vikram Singh", ownerRole:"Head coach · ACE certified",
+    features:[["🆓","Free trial day","Try the gym before you join."],["❄️","Fully AC","Clean, air-conditioned floor."],["🚿","Lockers & showers","Fresh towels included."],["📈","Progress tracking","Monthly body-composition checks."]],
+    reviews:[["Lost 11 kg in 5 months with Vikram's plan. Best decision I made this year.","Aditya J."],["Equipment is top notch and never crowded in the morning. Trainers actually care.","Meera T."],["Zumba batch is SO much fun. Great vibe and super clean washrooms.","Pooja R."]],
+    hours:{Mon:["05:30","23:00"],Tue:["05:30","23:00"],Wed:["05:30","23:00"],Thu:["05:30","23:00"],Fri:["05:30","23:00"],Sat:["06:00","22:00"],Sun:["07:00","13:00"]},
+    faq:[["Is there a joining fee?","No joining fee this month. Just pick a plan and start."],["Can I try before joining?","Yes! Message us on WhatsApp to book a free trial day."],["Do you have women-only batches?","Yes, our morning Zumba and yoga batches are women-only."],["Can I freeze my membership?","Annual members can freeze for up to 30 days."]],
+    ctaTitle:"Start your free trial.", ctaText:"Message us now and get a free trial day plus a fitness assessment.",
+    socials:{ig:"#",yt:"#"},
+  },
+
+  clinic: {
+    label:"Clinic", name:"SmileCare Dental", category:"Dental Clinic", area:"Koregaon Park, Pune",
+    titleLines:["SmileCare","Dental"], tagline:"Painless, modern dentistry for the whole family — from check-ups to complete smile makeovers.",
+    colors:["#00b3d6","#2b6bff"], whatsapp:"919811223344", phone:"+91 98112 23344",
+    address:"Lane 5, North Main Road, Koregaon Park, Pune, Maharashtra 411001",
+    rating:"4.9", reviewCount:"480", from:"₹300",
+    marquee:["Check-ups","Cleaning","Root canal","Implants","Braces","Whitening"],
+    stats:[["15+","Years experience"],["9k","Smiles treated"],["4.9★","Google rating"],["0","Hidden charges"]],
+    servicesEyebrow:"Treatments",
+    services:[
+      ["🦷","Consultation","Full check-up + advice","₹300"],
+      ["🪥","Scaling & polishing","Deep clean, 40 min","₹1,200"],
+      ["😁","Teeth whitening","Up to 8 shades brighter","₹6,500"],
+      ["🔧","Root canal","Single sitting, painless","₹4,500"],
+      ["😬","Clear aligners","Invisible braces",null],
+      ["🦴","Dental implants","Lifetime warranty",null],
+    ],
+    productsTitle:"Oral care <span class='grad-text'>kit</span>",
+    products:[
+      ["🪥","Electric toothbrush","2-min timer","₹1,999","Recommended"],
+      ["🧵","Water flosser","Cordless","₹2,799"],
+      ["🌿","Sensitivity toothpaste","Pack of 2","₹299"],
+      ["💧","Mouthwash","Alcohol-free, 500ml","₹249"],
+    ],
+    aboutTitle:"Gentle care, real results.",
+    about:"Dr. Sameer and team combine the latest technology — digital X-rays, laser dentistry and 3D scans — with a calm, patient-first approach. No fear, no rush.",
+    owner:"Dr. Sameer Joshi", ownerRole:"BDS, MDS · Chief dentist",
+    features:[["🛡️","Sterile & safe","Hospital-grade sterilisation."],["📷","Digital X-ray","Low radiation, instant results."],["👨‍👩‍👧","Family friendly","Kids' dentistry available."],["🧾","Insurance help","We assist with claims."]],
+    reviews:[["Was terrified of root canals — this was honestly painless. Doctor explained everything.","Nikhil V."],["Very clean clinic and zero waiting since I booked on WhatsApp.","Shruti D."],["Got aligners here; results are amazing and the EMI option helped a lot.","Farhan A."]],
+    hours:{Mon:["10:00","19:00"],Tue:["10:00","19:00"],Wed:["10:00","19:00"],Thu:["10:00","19:00"],Fri:["10:00","19:00"],Sat:["10:00","16:00"],Sun:null},
+    faq:[["Do you handle emergencies?","Yes — call us directly for same-day emergency appointments."],["Is there EMI for treatments?","0% EMI is available on implants, aligners and smile makeovers."],["Do you treat children?","Yes, we have a dedicated paediatric dentist on Saturdays."],["How long is a first visit?","About 30 minutes including check-up and treatment plan."]],
+    ctaTitle:"Book your check-up.", ctaText:"Message us on WhatsApp and we'll find a time that suits you.",
+    socials:{ig:"#",fb:"#"},
+  },
+
+  boutique: {
+    label:"Boutique", name:"Rang Boutique", category:"Ethnic Wear & Tailoring", area:"Lajpat Nagar, Delhi",
+    titleLines:["Rang","Boutique"], tagline:"Handpicked ethnic wear and custom tailoring — made to fit you, styled to stand out.",
+    colors:["#c2185b","#7b2ff7"], whatsapp:"919877665544", phone:"+91 98776 65544",
+    address:"G-12, Central Market, Lajpat Nagar II, New Delhi 110024",
+    rating:"4.8", reviewCount:"275", from:"₹1,299",
+    marquee:["Kurtas","Lehengas","Sarees","Custom stitching","Alterations","Festive edit"],
+    stats:[["10","Years of craft"],["5k+","Outfits stitched"],["4.8★","Google rating"],["7-day","Stitching delivery"]],
+    servicesEyebrow:"Tailoring",
+    services:[
+      ["🧵","Kurta stitching","Custom fit, 5 days","₹799"],
+      ["👗","Blouse stitching","Designer necklines","₹1,199"],
+      ["✂️","Alterations","Same-day available","₹199"],
+      ["🪡","Lehenga stitching","Full set with can-can","₹4,999"],
+      ["📏","Home measurement","Within 5 km","₹299"],
+      ["👰","Bridal outfit","Fully customised",null],
+    ],
+    productsTitle:"New <span class='grad-text'>arrivals</span>",
+    products:[
+      ["👘","Chikankari kurta","Pure cotton, S–XXL","₹1,899","Bestseller"],
+      ["🥻","Banarasi saree","With blouse piece","₹5,499"],
+      ["🌸","Festive lehenga","Mirror work","₹8,999","New"],
+      ["🧣","Silk dupatta","Hand-block print","₹1,299"],
+    ],
+    aboutTitle:"Made to fit. Made for you.",
+    about:"From your everyday kurta to your wedding lehenga, our master tailors stitch every piece in-house with perfect finishing and an eye for detail.",
+    owner:"Simran Kaur", ownerRole:"Designer & founder",
+    features:[["📐","Perfect fit","Free alterations within 7 days."],["🚚","Home delivery","Across Delhi NCR."],["🎨","Custom designs","Bring a photo, we'll make it."],["⚡","Express stitching","48-hour option available."]],
+    reviews:[["Got my sister's wedding lehenga stitched here — the fit and finishing were flawless.","Jasleen K."],["Lovely collection and very reasonable prices. Ordered a kurta on WhatsApp!","Tanvi G."],["Same-day alterations saved me before a party. Super helpful staff.","Mehak S."]],
+    hours:{Mon:["11:00","20:30"],Tue:null,Wed:["11:00","20:30"],Thu:["11:00","20:30"],Fri:["11:00","20:30"],Sat:["11:00","21:00"],Sun:["11:00","21:00"]},
+    faq:[["How long does stitching take?","Usually 5–7 days. Express 48-hour stitching is available for a small extra charge."],["Can I send my design on WhatsApp?","Yes! Send photos and we'll share a quote and timeline."],["Do you deliver?","Yes, across Delhi NCR. Free above ₹3,000."],["What if it doesn't fit?","Alterations are free within 7 days of delivery."]],
+    ctaTitle:"Let's design your look.", ctaText:"Share your idea on WhatsApp — we'll get back with a quote in minutes.",
+    socials:{ig:"#",fb:"#"},
+  },
+};
+
+/* =================================================================
+   RENDERING — no need to edit below this line
+   ================================================================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const ORDER = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+function waLink(b, text){ return `https://wa.me/${b.whatsapp}?text=${encodeURIComponent(text)}`; }
+function fmt12(t){ let [h,m]=t.split(":").map(Number); const ap=h>=12?"PM":"AM"; h=h%12||12; return m?`${h}:${String(m).padStart(2,"0")} ${ap}`:`${h} ${ap}`; }
+function toMin(t){ const [h,m]=t.split(":").map(Number); return h*60+m; }
+
+function openStatus(b){
+  const now=new Date(), d=DAYS[now.getDay()], mins=now.getHours()*60+now.getMinutes(), h=b.hours[d];
+  if(h && mins>=toMin(h[0]) && mins<toMin(h[1])) return {open:true, text:`Open now · till ${fmt12(h[1])}`};
+  if(h && mins<toMin(h[0])) return {open:false, text:`Opens today at ${fmt12(h[0])}`};
+  for(let i=1;i<=7;i++){ const nd=DAYS[(now.getDay()+i)%7], nh=b.hours[nd]; if(nh) return {open:false, text:`Closed · opens ${i===1?"tomorrow":nd} ${fmt12(nh[0])}`}; }
+  return {open:false, text:"Closed"};
+}
+
+function render(key){
+  const b = BUSINESSES[key]; if(!b) return;
+  const root=document.documentElement;
+  root.style.setProperty("--a2", b.colors[0]); root.style.setProperty("--a1", b.colors[1]);
+  document.title = `${b.name} — ${b.category} in ${b.area}`;
+
+  const bind = {...b, initial:b.name[0], ownerInitial:b.owner.replace(/^Dr\.\s*/,"")[0], phoneDisplay:b.phone};
+  $$("[data-bind]").forEach(el=>{ const v=bind[el.dataset.bind]; if(v==null) return;
+    ["productsTitle"].includes(el.dataset.bind) ? el.innerHTML=v : el.textContent=v; });
+
+  const tel = "tel:"+b.phone.replace(/\s/g,"");
+  const map = "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(b.name+", "+b.address);
+  const wa  = waLink(b, `Hi ${b.name}! I found you online and would like to know more.`);
+  $$("[data-href]").forEach(a=>{ a.href = {tel,map,wa}[a.dataset.href]; if(a.dataset.href==="wa"){a.target="_blank";a.rel="noopener";} });
+
+  $("#heroTitle").innerHTML = esc(b.titleLines[0])+"<br><span class='grad-text'>"+esc(b.titleLines[1])+"</span><span class='dotend'>.</span>";
+  $("#fromPrice").textContent = b.from;
+  const st=openStatus(b); $("#openChip").innerHTML=`<span class="dot ${st.open?"open":"closed"}"></span><span>${st.text}</span>`;
+
+  $("#avatars").innerHTML = b.reviews.map((r,i)=>`<span style="background:${[b.colors[0],b.colors[1],"#111"][i%3]}">${esc(r[1][0])}</span>`).join("");
+
+  // Phone mockup
+  $("#phoneScroller").innerHTML = `
+    <div class="urlbar">🔒 ${esc(b.name.toLowerCase().replace(/[^a-z0-9]+/g,""))}.in</div>
+    <div class="p-hero"><span class="logo">${esc(b.name[0])}</span><h4>${esc(b.titleLines[0])}<br>${esc(b.titleLines[1])}</h4><p>${esc(b.marquee.slice(0,3).join(" · "))} · ${esc(b.area.split(",").pop().trim())}</p><span class="pill">★ ${b.rating} · ${b.reviewCount} reviews</span></div>
+    <div class="p-h">${esc(b.servicesEyebrow)}</div>
+    ${b.services.slice(0,4).map((s,i)=>`<div class="p-row"><i style="background:${SW[i]}"></i><span><b>${esc(s[1])}</b><small>${esc(s[2].split("·")[0])}</small></span><em>${s[3]?esc(s[3]):"Enquire"}</em></div>`).join("")}
+    <div class="p-h">Products</div>
+    <div class="p-grid">${b.products.slice(0,4).map((p,i)=>`<div><span style="background:${SW[(i+3)%SW.length]}55">${p[0]}</span><b></b><b></b></div>`).join("")}</div>
+    <div class="p-h">Timings</div>
+    <div class="p-row" style="display:block"><b>Today · ${(()=>{const h=b.hours[DAYS[new Date().getDay()]];return h?fmt12(h[0])+" – "+fmt12(h[1]):"Closed"})()}</b><small>${esc(b.address.split(",").slice(-2).join(","))}</small></div>`;
+
+  const items = [...b.marquee, ...b.marquee].map(m=>`<span>${esc(m)}</span>`).join("");
+  $("#marquee").innerHTML = items+items;
+
+  $("#stats").innerHTML = b.stats.map(s=>`<div class="stat reveal"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("");
+
+  $("#serviceList").innerHTML = b.services.map((s,i)=>`
+    <div class="svc reveal">
+      <span class="sw" style="background:${SW[i%SW.length]}">${s[0]}</span>
+      <div><h3>${esc(s[1])}</h3><p>${esc(s[2])}</p></div>
+      <div class="right">${s[3]?`<span class="price">${esc(s[3])}</span>`:`<span class="price ask">On enquiry</span>`}
+        <a class="mini" target="_blank" rel="noopener" href="${waLink(b,`Hi! I'd like to ${s[3]?"book":"know more about"}: ${s[1]}`)}">${s[3]?"Book":"Enquire"} →</a></div>
+    </div>`).join("");
+
+  $("#productList").innerHTML = b.products.map((p,i)=>`
+    <div class="prod reveal">
+      <div class="ph" style="background:linear-gradient(135deg,${SW[(i+2)%SW.length]}66,${SW[(i+5)%SW.length]}55)">${p[5]?`<img src="${esc(p[5])}" alt="${esc(p[1])}" loading="lazy">`:p[0]}${p[4]?`<span class="tag">${esc(p[4])}</span>`:""}</div>
+      <h3>${esc(p[1])}</h3><p>${esc(p[2])}</p>
+      <div class="foot"><span class="price">${esc(p[3])}</span><a class="mini" target="_blank" rel="noopener" href="${waLink(b,`Hi! I'd like to order: ${p[1]} (${p[3]})`)}"><svg class="i" style="width:14px;height:14px"><use href="#i-wa"/></svg>Order</a></div>
+    </div>`).join("");
+
+  const featBg=["var(--lime)","#ffd6ea","#d6e6ff","#fff1c2"];
+  $("#features").innerHTML = b.features.map((f,i)=>`<div class="feat reveal"><div class="ic" style="background:${featBg[i%4]}">${f[0]}</div><h3>${esc(f[1])}</h3><p>${esc(f[2])}</p></div>`).join("");
+
+  $("#reviewList").innerHTML = b.reviews.map((r,i)=>`
+    <div class="rev reveal"><span class="stars">★★★★★</span><q>${esc(r[0])}</q>
+      <div class="who"><span style="background:${[b.colors[0],b.colors[1],"#111"][i%3]}">${esc(r[1][0])}</span><div><b>${esc(r[1])}</b><small>Google review</small></div></div></div>`).join("");
+
+  const today=DAYS[new Date().getDay()];
+  $("#hours").innerHTML = ORDER.map(d=>{ const h=b.hours[d];
+    return `<li class="${d===today?"today":""}"><span>${d}${d===today?" · Today":""}</span>${h?`<span>${fmt12(h[0])} – ${fmt12(h[1])}</span>`:`<span class="off">Closed</span>`}</li>`; }).join("");
+
+  $("#map").innerHTML = `<iframe title="Map to ${esc(b.name)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=${encodeURIComponent(b.address)}&z=15&output=embed"></iframe>`;
+
+  $("#fService").innerHTML = `<option value="">Select one (optional)</option>`+[...b.services.map(s=>s[1]),...b.products.map(p=>p[1])].map(n=>`<option>${esc(n)}</option>`).join("")+`<option>Something else</option>`;
+
+  $("#faq").innerHTML = b.faq.map((f,i)=>`<details class="reveal" ${i===0?"open":""}><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
+
+  const sIcons={ig:"i-ig",fb:"i-fb",yt:"i-yt"}, sNames={ig:"Instagram",fb:"Facebook",yt:"YouTube"};
+  $("#socials").innerHTML = Object.entries(b.socials||{}).map(([k,u])=>`<a href="${esc(u)}" aria-label="${sNames[k]}" target="_blank" rel="noopener"><svg class="i"><use href="#${sIcons[k]}"/></svg></a>`).join("");
+
+  $$(".demo button").forEach(x=>x.classList.toggle("on", x.dataset.k===key));
+  observeReveal();
+  window.__biz = b;
+}
+
+/* Enquiry form → opens WhatsApp with a ready-made message */
+$("#enquiry").addEventListener("submit", e=>{
+  e.preventDefault();
+  const b=window.__biz, name=$("#fName"), phone=$("#fPhone");
+  let ok=true;
+  [name,phone].forEach(f=>{ const bad=!f.value.trim(); f.style.borderColor=bad?"#e5484d":""; if(bad) ok=false; });
+  if(!ok){ (name.value.trim()?phone:name).focus(); return; }
+  const svc=$("#fService").value, msg=$("#fMsg").value.trim();
+  const text = `New enquiry for ${b.name}\n\nName: ${name.value.trim()}\nPhone: ${phone.value.trim()}${svc?`\nInterested in: ${svc}`:""}${msg?`\nMessage: ${msg}`:""}`;
+  window.open(waLink(b,text),"_blank","noopener");
+  const btn=$("#fBtn"); btn.textContent="✓ Enquiry ready on WhatsApp"; btn.classList.add("sent");
+  setTimeout(()=>{ btn.textContent="Send enquiry →"; btn.classList.remove("sent"); e.target.reset(); },4000);
+});
+
+/* Scroll reveal */
+let io;
+function observeReveal(){
+  if(!("IntersectionObserver" in window)){ $$(".reveal").forEach(el=>el.classList.add("in")); return; }
+  io = io || new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target);} }),{threshold:.12, rootMargin:"0px 0px -40px 0px"});
+  $$(".reveal:not(.in)").forEach((el,i)=>{ el.style.transitionDelay = (i%4)*70+"ms"; io.observe(el); });
+}
+addEventListener("scroll",()=>$("#nav").classList.toggle("scrolled",scrollY>8),{passive:true});
+$("#yr").textContent=new Date().getFullYear();
+
+/* Demo switcher (for pitching to prospects) */
+const params=new URLSearchParams(location.search);
+const startKey = BUSINESSES[params.get("demo")] ? params.get("demo") : ACTIVE;
+if(SHOW_DEMO_SWITCHER){
+  const bar=document.createElement("div"); bar.className="demo";
+  bar.innerHTML=`<span class="lbl">Demo</span>`+Object.entries(BUSINESSES).map(([k,v])=>`<button data-k="${k}">${esc(v.label)}</button>`).join("");
+  bar.addEventListener("click",e=>{ const k=e.target.dataset?.k; if(!k) return;
+    history.replaceState(null,"","?demo="+k); render(k); scrollTo({top:0,behavior:"smooth"}); });
+  document.body.appendChild(bar);
+}
+render(startKey);
+</script>
+</body>
+</html>
